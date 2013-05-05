@@ -14,38 +14,49 @@ class DblLinkedList:
   def __init__(self):
     self.current_node = None
 
-  def goToRightEnd( self ):
+  def goToEnd( self ):
     node = self.current_node
     while (node != None and node.right != None):
       node = node.right
     self.current_node = node
 
-  def goToLeftEnd( self ):
+  def goToStart( self ):
     node = self.current_node
     while (node != None and node.left != None):
       node = node.left
     self.current_node = node
 
-  def rightAddNode( self, data ):
-    self.goToRightEnd()
-    node = Node( data, self.current_node, None )
+  def append( self, data ):
+    self.goToEnd()
+    node = DblNode( data, self.current_node, None )
+    if (self.current_node):
+        self.current_node.right = node
     self.current_node = node
 
-  def leftAddNode( self, data ):
-    self.goToLeftEnd()
-    node = Node( data, None, self.current_node )
+  def prepend( self, data ):
+    self.goToStart()
+    node = DblNode( data, None, self.current_node )
+    if (self.current_node):
+        self.current_node.left = node
     self.current_node = node
 
   def RightToLeftPrintList( self ):
-    self.goToRightEnd()
+    self.goToEnd()
     node = self.current_node
     while (node):
       print( str(node.data) )
       node = node.left
 
   def LeftToRightPrintList( self ):
-    self.goToLeftEnd()
+    self.goToStart()
     node = self.current_node
     while (node):
       print( str(node.data) )
       node = node.right
+
+if __name__ == "__main__":
+  ll = DblLinkedList()
+  ll.append("Hello")
+  ll.append("World")
+  ll.LeftToRightPrintList()
+  ll.RightToLeftPrintList()
