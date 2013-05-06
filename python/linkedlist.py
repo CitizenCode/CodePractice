@@ -32,7 +32,7 @@ class LinkedList:
   def append( self, data ):
     self.goToEnd()
     node = Node( data, None )
-    if (self.current_node != None):
+    if (self.current_node):
       self.current_node.nxt = node
     if (self.current_node == None and self.head == None):
       self.head = node
