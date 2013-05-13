@@ -4,36 +4,43 @@
   This file is for practicing sort algorithms in Python.
 """
 
-def bubbleSort( list ):
-"""
-  The worst sort. O(n^2) time O(1) memory.
-"""
+def bubbleSort( lst ):
+  """
+    The worst sort. O(n^2) time O(1) memory.
+  """
   sorted = False
   while not sorted:
     sorted = True
-    for i in range(len( list ) - 1):
-      if (list[i] > list[i+1]):
+    for i in range(len( lst ) - 1):
+      if (lst[i] > lst[i+1]):
         sorted = False
-        temp = list[i+1]
-        list[i+1] = list[i]
-        list[i] = temp
+        temp = lst[i+1]
+        lst[i+1] = lst[i]
+        lst[i] = temp
 
-  return list
+  return lst
 
-def selectionSort( list ):
-  def findMin( list ):
-    min = (0, list[0])
-    for i in range( len(list) ):
-      if list[i] < min:
-        min = i, list[i]
+def selectionSort( lst ):
+  # Base case
+  if (lst == []):
+    return lst
+
+  def findMin( lst ):
+    min = (0, lst[0])
+    for i in range( len(lst) ):
+      if lst[i] < min[1]:
+        min = i, lst[i]
     return min
   
-  m = findMin( list )
-  list[0], list[m[0]] = m[1], list[0]
-  return [list[0]].extend( selectionSort( list[1:] ) )
+  # Find min and put in 0 position
+  m = findMin( lst )
+  lst[0], lst[m[0]] = m[1], lst[0]
+
+  # Sort the rest
+  return lst[:1] +  selectionSort( lst[1:] )
 
 if __name__ == "__main__":
-  l = [1,7,3,5,8]
+  l = [7,5,8,12,3,48,72,69]
   print( bubbleSort(l) )
   print( selectionSort(l) )
       
