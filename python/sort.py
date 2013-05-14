@@ -1,7 +1,7 @@
 """
   sort
 
-  This file is for practicing sort algorithms in Python.
+  This file is for practicing sorting algorithms in Python.
 """
 
 def bubbleSort( lst ):
@@ -73,8 +73,30 @@ def mergeSort( lst ):
 
   return merge( left, right )
 
+def quickSort( lst ):
+  """
+    O(n log n) avg O(n^2) worst time, O( log n ) memory
+  """
+  if (len(lst) < 1):
+    return lst
+
+  # Naive pivot
+  pivot = lst.pop( len(lst) / 2 )
+  left = []
+  right = []
+  for l in lst:
+    if l < pivot:
+      left.append(l)
+    else:
+      right.append(l)
+
+  return quickSort( left ) + [pivot] + quickSort( right )
+
+
 if __name__ == "__main__":
   l = [7,5,8,12,122,35,55,1,3,48,72,69]
-  print( bubbleSort(l) )
-  print( selectionSort(l) )
-  print( mergeSort(l) )
+  print( "Unsorted: " + str(l) )
+  print( "Bubble: " + str(bubbleSort(l)) )
+  print( "Selection: " + str(selectionSort(l)) )
+  print( "Merge: " + str(mergeSort(l)) )
+  print( "Quick: " + str(quickSort(l)) )
