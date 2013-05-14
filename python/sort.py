@@ -6,7 +6,7 @@
 
 def bubbleSort( lst ):
   """
-    The worst sort. O(n^2) time O(1) memory.
+    The worst sort. O(n^2) time avg and worst case, O(1) memory.
   """
   sorted = False
   while not sorted:
@@ -21,6 +21,10 @@ def bubbleSort( lst ):
   return lst
 
 def selectionSort( lst ):
+  """
+    Pretty bad still, O(n^2) avg and worst case time, O(1) memory.
+    But do these O's count recursion?
+  """
   # Base case
   if (lst == []):
     return lst
@@ -39,8 +43,38 @@ def selectionSort( lst ):
   # Sort the rest
   return lst[:1] +  selectionSort( lst[1:] )
 
+def mergeSort( lst ):
+  """
+    O(n log n) avg and worst time, memory depends
+  """
+  if (len(lst) <= 1):
+    return lst # The list of length 1 (0) is sorted by definition
+
+  def merge( left, right ):
+    result = []
+    while( len(left) > 0 and len(right) > 0 ):
+      if (left[0] < right[0]):
+        result.append(left[0])
+        left = left[1:]
+      else:
+        result.append(right[0])
+        right = right[1:]
+    if (len( left ) > 0):
+      result = result + left
+    if (len( right ) > 0):
+      result = result + right
+
+    return result
+
+  mid = len( lst ) / 2
+  left, right = lst[:mid], lst[mid:]
+  left = mergeSort( left )
+  right = mergeSort( right )
+
+  return merge( left, right )
+
 if __name__ == "__main__":
-  l = [7,5,8,12,3,48,72,69]
+  l = [7,5,8,12,122,35,55,1,3,48,72,69]
   print( bubbleSort(l) )
   print( selectionSort(l) )
-      
+  print( mergeSort(l) )
