@@ -78,7 +78,8 @@ def test(size=10):
 def test_maxheap(h):
     for i in range(0, len(h.array)):
         try:
-            assert h.array[i] >= h.lchild(i)[1] and h.array[i] >= h.rchild(i)[1]
+            assert h.array[i] >= h.lchild(i)[1]
+            assert h.array[i] >= h.rchild(i)[1]
         except IndexError:
             # No child
             pass
