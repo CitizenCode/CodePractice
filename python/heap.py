@@ -45,31 +45,54 @@ class Heap(object):
         In an array based heap, the left child index of parent_index is 2*parent_index + 1
         """
         child_index = (2 * parent_index) + 1
-        return child_index, self.array[child_index]
+        child_value = self.array[child_index] if child_index < len(self.array) else None
+        return child_index, child_value
 
     def rchild(self, parent_index):
         """
         In an array based heap, the right child index of parent_index is 2*parent_index + 2
         """
         child_index = (2 * parent_index) + 2
-        return child_index, self.array[child_index]
+        child_value = self.array[child_index] if child_index < len(self.array) else None
+        return child_index, child_value
 
-    def max_heapify(self):
+    def max_heapify(self, i):
         """
-        Turn our heap into a max heap.
+        Turn our heap into a max heap. Iteratively walk bottom to top, right to left parents
+        and swap values with children if the max heap condition isn't satisfied.
         """
-        for i in range(len(self.array) - 1, 0, -1):
-            value = self.array[i]
+        value = self.array[i]
+        largest = i
+
+        lchild, lvalue = self.lchild(i)
+        rchild, rvalue = self.rchild(i)
+        
+        if rvalue and self.array[largest] < rvalue:
+            largest = rchild
+        if lvalue and self.array[largest] < lvalue:
+            largest = lchild
+
+        if largest != i:
+            self.array[i] = self.array[largest]
+            self.array[largest] = value
+
+        try:
             parent_index, parent_value = self.parent(i)
-            if value > parent_value:
-                self.array[parent_index] = value
-                self.array[i] = parent_value
+            self.max_heapify(parent_index)
+        except RootNodeException:
+            # All done
+            pass
+
+    def build_max_heap(self):
+        for i in range(len(self.array)/2, -1, -1):
+            self.max_heapify(i)
+
 
 def test(size=10):
     h = Heap()
     h.randomize(size)
     print("Unheaped: {0}".format(h.array))
-    h.max_heapify()
+    h.build_max_heap()
     print("Max heaped: {0}".format(h.array))
     test_maxheap(h)
     return h
@@ -77,9 +100,12 @@ def test(size=10):
 
 def test_maxheap(h):
     for i in range(0, len(h.array)):
-        try:
-            assert h.array[i] >= h.lchild(i)[1]
-            assert h.array[i] >= h.rchild(i)[1]
-        except IndexError:
-            # No child
-            pass
+        value = h.array[i]
+        lchild_index, lchild_value = h.lchild(i)
+        rchild_index, rchild_value = h.rchild(i)
+
+        if lchild_value:
+            assert value >= lchild_value, "Parent {0} at {1} !>= left child {2} at {3}".format(value, i, lchild_value, lchild_index)
+
+        if rchild_value:
+            assert value >= rchild_value, "Parent {0} at {1} !>= right child {2} at {3}".format(value, i, rchild_value, rchild_index)
