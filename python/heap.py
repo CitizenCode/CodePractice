@@ -75,26 +75,52 @@ class Heap(object):
         if largest != i:
             self.array[i] = self.array[largest]
             self.array[largest] = value
+            self.max_heapify(largest)
 
-        try:
-            parent_index, parent_value = self.parent(i)
-            self.max_heapify(parent_index)
-        except RootNodeException:
-            # All done
-            pass
+    def min_heapify(self, i):
+        """
+        Turn our heap into a max heap. Iteratively walk bottom to top, right to left parents
+        and swap values with children if the max heap condition isn't satisfied.
+        """
+        value = self.array[i]
+        largest = i
+
+        lchild, lvalue = self.lchild(i)
+        rchild, rvalue = self.rchild(i)
+        
+        if rvalue and self.array[largest] > rvalue:
+            largest = rchild
+        if lvalue and self.array[largest] > lvalue:
+            largest = lchild
+
+        if largest != i:
+            self.array[i] = self.array[largest]
+            self.array[largest] = value
+            self.min_heapify(largest)
 
     def build_max_heap(self):
         for i in range(len(self.array)/2, -1, -1):
             self.max_heapify(i)
 
+    def build_min_heap(self):
+        for i in range(len(self.array)/2, -1, -1):
+            self.min_heapify(i)
+
 
 def test(size=10):
     h = Heap()
+
     h.randomize(size)
     print("Unheaped: {0}".format(h.array))
     h.build_max_heap()
     print("Max heaped: {0}".format(h.array))
     test_maxheap(h)
+
+    h.randomize(size)
+    print("Unheaped: {0}".format(h.array))
+    h.build_min_heap()
+    print("Min heaped: {0}".format(h.array))
+    test_minheap(h)
     return h
 
 
@@ -109,3 +135,16 @@ def test_maxheap(h):
 
         if rchild_value:
             assert value >= rchild_value, "Parent {0} at {1} !>= right child {2} at {3}".format(value, i, rchild_value, rchild_index)
+
+
+def test_minheap(h):
+    for i in range(0, len(h.array)):
+        value = h.array[i]
+        lchild_index, lchild_value = h.lchild(i)
+        rchild_index, rchild_value = h.rchild(i)
+
+        if lchild_value:
+            assert value <= lchild_value, "Parent {0} at {1} !<= left child {2} at {3}".format(value, i, lchild_value, lchild_index)
+
+        if rchild_value:
+            assert value <= rchild_value, "Parent {0} at {1} !<= right child {2} at {3}".format(value, i, rchild_value, rchild_index)
