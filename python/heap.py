@@ -43,6 +43,7 @@ class Heap(object):
     def lchild(self, parent_index):
         """
         In an array based heap, the left child index of parent_index is 2*parent_index + 1
+        for an array indexed from 0.
         """
         child_index = (2 * parent_index) + 1
         child_value = self.array[child_index] if child_index < len(self.array) else None
@@ -51,15 +52,20 @@ class Heap(object):
     def rchild(self, parent_index):
         """
         In an array based heap, the right child index of parent_index is 2*parent_index + 2
+        for an array indexed from 0.
         """
         child_index = (2 * parent_index) + 2
         child_value = self.array[child_index] if child_index < len(self.array) else None
         return child_index, child_value
 
-    def max_heapify(self, i):
+    def max_heap_sink(self, i):
         """
-        Turn our heap into a max heap. Iteratively walk bottom to top, right to left parents
-        and swap values with children if the max heap condition isn't satisfied.
+        Max heapify the tree i and it's immediate children, where the children are the roots
+        of sub heaps.
+
+        Find the largest value in the i-rooted tree and make it the new root. Max-heap-sink
+        down the swapped value path to sink the swapped value to it's condition satisfying
+        spot in the binary tree/heap.
         """
         value = self.array[i]
         largest = i
@@ -75,12 +81,16 @@ class Heap(object):
         if largest != i:
             self.array[i] = self.array[largest]
             self.array[largest] = value
-            self.max_heapify(largest)
+            self.max_heap_sink(largest)
 
-    def min_heapify(self, i):
+    def min_heap_sink(self, i):
         """
-        Turn our heap into a max heap. Iteratively walk bottom to top, right to left parents
-        and swap values with children if the max heap condition isn't satisfied.
+        Min heapify the tree i and it's immediate children, where the children are the roots
+        of sub heaps.
+
+        Find the smallest value in the i-rooted tree and make it the new root. Min-heap-sink
+        down the swapped value path to sink the swapped value to it's condition satisfying
+        spot in the binary tree/heap.
         """
         value = self.array[i]
         largest = i
@@ -96,15 +106,27 @@ class Heap(object):
         if largest != i:
             self.array[i] = self.array[largest]
             self.array[largest] = value
-            self.min_heapify(largest)
+            self.min_heap_sink(largest)
 
     def build_max_heap(self):
+        """
+        Construct a max heap by iteratively applying max_heap_sink from the bottom to
+        the top of the tree.
+
+        We start iteration at length/2 as > length/2 are all leaves and thus heaps.
+        """
         for i in range(len(self.array)/2, -1, -1):
-            self.max_heapify(i)
+            self.max_heap_sink(i)
 
     def build_min_heap(self):
+        """
+        Construct a min heap by iteratively applying min_heap_sink from the bottom to
+        the top of the tree.
+
+        We start iteration at length/2 as > length/2 are all leaves and thus heaps.
+        """
         for i in range(len(self.array)/2, -1, -1):
-            self.min_heapify(i)
+            self.min_heap_sink(i)
 
 
 def test(size=10):
