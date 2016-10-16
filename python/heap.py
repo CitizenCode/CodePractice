@@ -72,7 +72,7 @@ class Heap(object):
 
         lchild, lvalue = self.lchild(i)
         rchild, rvalue = self.rchild(i)
-        
+
         if rvalue and self.array[largest] < rvalue:
             largest = rchild
         if lvalue and self.array[largest] < lvalue:
@@ -97,7 +97,7 @@ class Heap(object):
 
         lchild, lvalue = self.lchild(i)
         rchild, rvalue = self.rchild(i)
-        
+
         if rvalue and self.array[largest] > rvalue:
             largest = rchild
         if lvalue and self.array[largest] > lvalue:
@@ -128,21 +128,54 @@ class Heap(object):
         for i in range(len(self.array)/2, -1, -1):
             self.min_heap_sink(i)
 
+    def exchange_root(self):
+        """
+        Remove the root (min/max) of the heap and make the last element (anything)
+        the new root. Sink the new root to satisfy our heap condition.
+        """
+        first_value = self.array[0]
+        last_value = self.array[-1]
+        self.array[0] = last_value
+        self.array = self.array[:-1]
+        return first_value
+
+    def max_heapsort(self):
+        _sorted = []
+        while self.array:
+            _sorted.append(self.exchange_root())
+            if self.array:
+                self.max_heap_sink(0)  # sink the new root to its heapified spot
+        return _sorted
+
+    def min_heapsort(self):
+        _sorted = []
+        while self.array:
+            _sorted.append(self.exchange_root())
+            if self.array:
+                self.min_heap_sink(0)  # sink the new root to its heapified spot
+        return _sorted
+
 
 def test(size=10):
     h = Heap()
 
+    print("\nMaxheap tests:")
     h.randomize(size)
     print("Unheaped: {0}".format(h.array))
     h.build_max_heap()
     print("Max heaped: {0}".format(h.array))
     test_maxheap(h)
+    max_heapsorted = h.max_heapsort()
+    print("Max heapsorted: {0}".format(max_heapsorted))
 
+    print("\nMinheap tests:")
     h.randomize(size)
     print("Unheaped: {0}".format(h.array))
     h.build_min_heap()
     print("Min heaped: {0}".format(h.array))
     test_minheap(h)
+    min_heapsorted = h.min_heapsort()
+    print("Min heapsorted: {0}".format(min_heapsorted))
     return h
 
 
