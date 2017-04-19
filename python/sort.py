@@ -66,7 +66,7 @@ def mergeSort( lst ):
 
     return result
 
-  mid = len( lst ) / 2
+  mid = int(len( lst ) / 2)
   left, right = lst[:mid], lst[mid:]
   left = mergeSort( left )
   right = mergeSort( right )
