@@ -81,7 +81,7 @@ def quickSort( lst ):
     return lst
 
   # Naive pivot
-  pivot = lst.pop( len(lst) / 2 )
+  pivot = lst.pop( int(len(lst) / 2) )
   left = []
   right = []
   for l in lst:
